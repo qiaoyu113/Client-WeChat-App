@@ -87,6 +87,7 @@ App({
     }
   },
   globalData: {
+    buryPoint: util.buryPoint,
     token:null, 
     userInfo:null,
     // m1环境域名

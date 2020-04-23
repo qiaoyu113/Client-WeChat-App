@@ -1,3 +1,7 @@
+// gio 埋点
+var gio = require("../components/gio-minp/index.js").default;
+var gioConfig = require("./gioConfig.js").default;
+gio('setConfig', gioConfig);
 //时间戳
 const formatTime = date => {
   const year = date.getFullYear()
@@ -99,10 +103,27 @@ function checkUpdateVersion() {
   })
 }
 
+// 统计埋点
+function buryPoint(eventNameVal, eventNameValCH, propertiesVal){
+  // 只统计生产环境埋点
+  // if(location.host === 'partner-bss-api.yunniao.cn')
+    for (const key in propertiesVal) {
+      if (propertiesVal.hasOwnProperty(key)) {
+        if (propertiesVal[key] === '') {
+          delete propertiesVal[key]
+        }
+      }
+    }
+  // }
+  gio('track', eventNameVal, propertiesVal);
+  // App.zhuge.track(eventNameValCH, propertiesVal);
+}
+
 module.exports = {
   formatTime: formatTime,
   picker: picker,
   picker2: picker2,
+  buryPoint: buryPoint,
   toDecimal2: toDecimal2,
   checkUpdateVersion: checkUpdateVersion
 }
